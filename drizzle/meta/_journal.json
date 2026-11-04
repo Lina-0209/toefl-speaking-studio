@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790667312362,
+      "tag": "0000_broken_sharon_ventura",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790668162368,
+      "tag": "0001_cheerful_layla_miller",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1793788346922,
+      "tag": "0002_overjoyed_molecule_man",
+      "breakpoints": true
+    }
+  ]
+}

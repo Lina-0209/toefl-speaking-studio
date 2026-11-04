@@ -1,0 +1,148 @@
+{
+  "stories": [
+    {
+      "id": "A",
+      "topic": "Research / Study",
+      "text": "Last semester, I had a difficult research project. I made a simple weekly plan and divided the project into several small tasks, such as reading papers, running experiments, and writing the report. When I had problems, I discussed them with my teammates. In the end, I finished the project on time and learned a lot from the experience."
+    },
+    {
+      "id": "B",
+      "topic": "AI / Technology",
+      "text": "I often use AI tools to organize information and check my writing. For example, when I write a report, I sometimes use AI to summarize a long article or check whether a sentence is clear. It saves me a lot of time, especially when I have several tasks to finish. However, I still check important information myself."
+    },
+    {
+      "id": "C",
+      "topic": "Teamwork",
+      "text": "I once worked on a group project with three classmates. We divided the work based on what each person was good at. For example, one person collected information, another prepared the slides, and I helped organize the final presentation. We also had a short meeting every week to discuss our progress."
+    },
+    {
+      "id": "D",
+      "topic": "Public Transportation",
+      "text": "I often take public transportation when I go somewhere far from campus. For example, I usually take the subway or bus when I go shopping or meet my friends downtown. It is convenient and affordable, and I don't have to worry about finding a parking space. It also produces less pollution than driving alone."
+    },
+    {
+      "id": "E",
+      "topic": "Exercise",
+      "text": "I usually go for a walk for about thirty minutes in the evening. I normally walk around campus or in a nearby park while listening to music. It helps me stay active and relax after sitting in front of my computer for several hours. I usually feel more energetic afterward."
+    },
+    {
+      "id": "F",
+      "topic": "Friends",
+      "text": "On weekends, I sometimes have dinner or go for a walk with two or three close friends. We usually talk about school, our research, or something interesting that happened during the week. Spending time with them helps me relax and gives me a chance to take a break from work."
+    },
+    {
+      "id": "G",
+      "topic": "Travel",
+      "text": "Last year, I visited a new city with some friends for a short trip. We tried some local food, visited a museum, and walked around the city center. I especially enjoyed visiting the museum because I learned something about the local history and culture. The trip was relaxing and also gave me a new experience."
+    },
+    {
+      "id": "H",
+      "topic": "Cooking / Diet",
+      "text": "I usually cook simple meals at home. For example, I often make eggs, chicken, vegetables, and rice because they are easy to prepare. I also try to eat more high-protein foods, such as eggs and chicken, and eat some fruit every day. Cooking at home allows me to choose fresh and healthy ingredients, and it is also cheaper than eating out."
+    },
+    {
+      "id": "I",
+      "topic": "Shopping / Product",
+      "text": "When I buy something important, such as a laptop or headphones, I usually care about quality more than appearance. I prefer reliable products that can last for several years. They may cost a little more at first, but I don't need to replace them often, so they can save money in the long run."
+    },
+    {
+      "id": "J",
+      "topic": "Reading / Learning",
+      "text": "When I want to learn something new, I usually read short articles or watch online tutorials. For example, if I need to learn a new research tool, I first read a simple introduction and then follow a step-by-step video. This is convenient and helps me understand things faster."
+    },
+    {
+      "id": "K",
+      "topic": "Creativity / Art",
+      "text": "I don't think I'm especially artistic, but I do enjoy simple creative activities. For example, I sometimes take photos, make simple presentation slides, or try different ways to explain an idea. I think creativity is useful because it helps people see problems from different perspectives and express themselves more clearly."
+    },
+    {
+      "id": "L",
+      "topic": "Motivation / Reward",
+      "text": "When I finish a difficult task or keep a good habit for a week, I like to give myself a small reward. For example, I might have a nice meal, watch a movie, or spend some time with friends. A small reward makes the experience more enjoyable and motivates me to continue."
+    },
+    {
+      "id": "M",
+      "topic": "Challenge / Problem Solving",
+      "text": "One common challenge is staying consistent, especially when people are busy. I think the best solution is to start with a simple goal. For example, instead of doing something for an hour every day, a beginner could start with twenty minutes three times a week. Small goals are easier to follow and can help people build confidence."
+    },
+    {
+      "id": "N",
+      "topic": "Future / Change",
+      "text": "I think many things will become more flexible and technology-based in the future. One major reason is that people want convenient and efficient options. Technology also makes it easier to offer different services, classes, or ways of working. However, the final result will probably depend on people's needs, available resources, and future demand."
+    }
+  ],
+  "reasons": [
+    {
+      "theme": "1. 方便 Convenience",
+      "sentence": "It makes my daily life much more convenient."
+    },
+    {
+      "theme": "2. 效率 Efficiency",
+      "sentence": "It saves me time and helps me get things done more efficiently."
+    },
+    {
+      "theme": "3. 经济 Cost",
+      "sentence": "It is more affordable and helps me save money in the long run."
+    },
+    {
+      "theme": "4. 耐久 Durability",
+      "sentence": "It is reliable and can last for a long time."
+    },
+    {
+      "theme": "5. 安全 Safety",
+      "sentence": "It can reduce unnecessary risks and make people feel safer."
+    },
+    {
+      "theme": "6. 环保 Environment",
+      "sentence": "It can reduce waste and have a positive impact on the environment."
+    },
+    {
+      "theme": "7. 交流 Communication",
+      "sentence": "It gives people more chances to communicate and exchange ideas."
+    },
+    {
+      "theme": "8. 经验 Experience",
+      "sentence": "It gives people practical experience and helps them learn useful skills."
+    },
+    {
+      "theme": "9. 乐趣 Enjoyment",
+      "sentence": "It makes the experience more enjoyable and interesting."
+    },
+    {
+      "theme": "10. 成就 Achievement",
+      "sentence": "It gives me a sense of achievement and motivates me to keep improving."
+    },
+    {
+      "theme": "11. 情绪 Emotion",
+      "sentence": "It helps me reduce stress and feel mentally refreshed."
+    },
+    {
+      "theme": "12. 健康 Health",
+      "sentence": "It helps me stay active and develop a healthier lifestyle."
+    }
+  ],
+  "shortStories": [
+    "A. Research / Study    可覆盖：效率 / 交流 / 经验 / 成就\nLast semester, I had a difficult project. I made a simple plan and discussed some problems with my teammates. In the end, I finished it on time.",
+    "B. Technology    可覆盖：方便 / 效率\nI often use online tools to organize information and check my work. They save me a lot of time, especially when I am busy.",
+    "C. Public Transportation    可覆盖：方便 / 经济 / 环保\nI often take public transportation when I go somewhere far away. It is affordable and convenient, and it also produces less pollution than driving alone.",
+    "D. Exercise / Walking    可覆盖：健康 / 情绪 / 乐趣\nI usually go for a walk for about thirty minutes in the evening. It helps me stay healthy and relax after a busy day.",
+    "E. Friends / Teamwork    可覆盖：交流 / 乐趣 / 情绪\nI sometimes spend time with my friends or classmates. We talk about school and daily life, and I usually feel much better afterward.",
+    "F. Product    可覆盖：耐久 / 经济\nI once bought a very cheap product, but it broke quickly. Since then, I have preferred reliable products that can last longer."
+  ],
+  "frameworks": [
+    "框架 A：最常用\nI think...\nOne major reason is that...\nFor example,...\nSo overall,...",
+    "框架 B：两个理由\nI think...\nFirst,...\nFor example,...\nAlso,...\nSo overall,...",
+    "框架 C：正反评价题\nI think it has both advantages and disadvantages.\nThe main advantage is that...\nHowever,...\nOverall, I think..."
+  ],
+  "functions": [
+    "1. Recommendation / 推荐\nI would recommend starting with something simple and practical. For example, ___. This is a good choice because ___.\n适用：What would you recommend? / What advice would you give? / What should someone do?",
+    "2. Challenge + Solution / 挑战与解决\nOne possible challenge is ___. I think the best way to deal with it is to ___. For example, ___. This makes it easier to ___.\n适用：What might be difficult? / How would you help? / How can people solve this problem?",
+    "3. Reward + Motivation / 奖励与动机\nA small reward can help people stay motivated. For example, after ___, I would ___. This makes the experience more enjoyable and encourages people to continue.\n适用：What would be a good reward? / How can people stay motivated?",
+    "4. Future Prediction / 未来预测\nI think ___ will become more common in the future. One major reason is that ___. Technology may also play an important role. However, it will probably depend on people's needs, available resources, and future demand.\n适用：What will happen in the future? / Will X become more or less common? / What factors may influence it?",
+    "5. Compare / Importance / 比较与重要性\nI think both are important, but they help people in different ways. ___ helps people ___, while ___ helps people ___. Ideally, people should have opportunities to develop both.\n适用：Which is more important? / Is A as important as B? / Compare two choices."
+  ],
+  "extras": [
+    "Classical music, jazz music, rock music",
+    "I listen to music daily. It is a key part of my routine."
+  ]
+}
