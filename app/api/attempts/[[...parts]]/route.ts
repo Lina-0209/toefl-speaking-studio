@@ -1,3 +1,4 @@
+import { requestLanguage, translateText } from "../../../../lib/language";
 import { Attempt, ITEM_COUNT, StoredFile, emptyFiles, emptyPrompts, emptyResults } from "../../../../lib/attempt";
 import { estimateBand, extractPrompts, scoreItem } from "../../../../lib/evaluate";
 import { recommendAnswer } from "../../../../lib/recommend";
@@ -50,7 +51,7 @@ export async function GET(request: Request) {
     }
     if (parts.length === 1) return Response.json({ attempt });
     throw new HttpError(404, "找不到请求的内容。");
-  } catch (error) { return errorResponse(error); }
+  } catch (error) { return errorResponse(error, request); }
 }
 
 export async function POST(request: Request) {
@@ -66,7 +67,7 @@ export async function POST(request: Request) {
       if (body.title !== undefined && typeof body.title !== "string") throw new HttpError(400, "练习名称格式不正确。");
       const customTitle = typeof body.title === "string" ? body.title.trim() : "";
       if (customTitle.length > 100) throw new HttpError(400, "练习名称不能超过 100 个字符。");
-      const title = customTitle || `口语练习 · ${new Intl.DateTimeFormat("zh-CN", { dateStyle: "medium", timeZone: "Asia/Manila" }).format(new Date())}`;
+      const title = customTitle || translateText("口语练习 · {0}", requestLanguage(request), new Intl.DateTimeFormat(requestLanguage(request) === "en" ? "en-US" : "zh-CN", { dateStyle: "medium", timeZone: "Asia/Shanghai" }).format(new Date()));
       await db.prepare("INSERT INTO attempts (id, owner_id, created_at, updated_at, title, prompts, images, audio, results, band, band_note, status, version) VALUES (?, ?, ?, ?, ?, '[]', '[]', '[]', '[]', NULL, NULL, 'draft', 1)").bind(id, ownerId, now, now, title).run();
       return Response.json({ attempt: await loadAttempt(id, ownerId) }, { status: 201 });
     }
@@ -155,27 +156,27 @@ export async function POST(request: Request) {
       if (attempt.results[number - 1]) return Response.json({ attempt });
       const object = await bucket.get(file.key);
       if (!object) throw new HttpError(404, "录音缺失，请重新上传。");
-      const result = await scoreItem(ownerId, number, prompt, file, new Uint8Array(await object.arrayBuffer()));
+      const result = await scoreItem(ownerId, number, prompt, file, new Uint8Array(await object.arrayBuffer()), requestLanguage(request));
       attempt.results[number - 1] = result; attempt.status = "scoring";
       await saveAttempt(attempt, ownerId);
       return Response.json({ attempt });
     }
     if (parts[1] === "answer" && parts.length === 3) {
       const number = numberPart(parts[2]);
-      const recommendation = await recommendAnswer(ownerId, attempt, number);
+      const recommendation = await recommendAnswer(ownerId, attempt, number, requestLanguage(request));
       attempt.results[number - 1] = { ...attempt.results[number - 1]!, ...recommendation };
       await saveAttempt(attempt, ownerId);
       return Response.json({ attempt });
     }
     if (parts[1] === "finalize" && parts.length === 2) {
       if (attempt.results.length !== ITEM_COUNT || attempt.results.some((result) => !result)) throw new HttpError(400, "完成全部 11 题后才能生成总分。");
-      const { band, note } = await estimateBand(ownerId, attempt);
+      const { band, note } = await estimateBand(ownerId, attempt, requestLanguage(request));
       attempt.band = band; attempt.bandNote = note; attempt.status = "complete";
       await saveAttempt(attempt, ownerId);
       return Response.json({ attempt });
     }
     throw new HttpError(404, "找不到请求的内容。");
-  } catch (error) { return errorResponse(error); }
+  } catch (error) { return errorResponse(error, request); }
 }
 
 export async function PUT(request: Request) {
@@ -194,7 +195,7 @@ export async function PUT(request: Request) {
     if (typeof body.title === "string" && body.title.trim()) attempt.title = body.title.trim().slice(0, 100);
     await saveAttempt(attempt, ownerId);
     return Response.json({ attempt });
-  } catch (error) { return errorResponse(error); }
+  } catch (error) { return errorResponse(error, request); }
 }
 
 export async function DELETE(request: Request) {
@@ -214,5 +215,5 @@ export async function DELETE(request: Request) {
     if (keys.length) await bucket.delete(keys);
     await db.prepare("DELETE FROM attempts WHERE id = ? AND owner_id = ?").bind(attempt.id, ownerId).run();
     return Response.json({ ok: true });
-  } catch (error) { return errorResponse(error); }
+  } catch (error) { return errorResponse(error, request); }
 }

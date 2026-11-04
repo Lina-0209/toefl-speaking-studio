@@ -1,3 +1,4 @@
+import { feedbackLanguageInstruction, type Language } from "./language";
 import { requireMaterial } from "./material-store";
 import { Attempt } from "./attempt";
 import { getCredential, providerJson, ProviderError } from "./provider";
@@ -15,7 +16,7 @@ function sharedCorePhrase(source: string, answer: string) {
   }
   return "";
 }
-export async function recommendAnswer(ownerId: string, attempt: Attempt, number: number) {
+export async function recommendAnswer(ownerId: string, attempt: Attempt, number: number, language: Language = "zh") {
   if (number < 8 || number > 11) throw new HttpError(400, "只有 Interview 题需要推荐回答。");
   const prompt = attempt.prompts[number - 1]?.trim();
   const scored = attempt.results[number - 1];
@@ -41,6 +42,7 @@ export async function recommendAnswer(ownerId: string, attempt: Attempt, number:
     `每道题固定采用“两个核心短语（即 12 个万能理由中的两条）＋适当的素材例子”的结构。在保留原回答切题观点的基础上，从编号 1–12 中选恰好两个不同且适合用户思路的核心短语，用它们组织或补充两个主要理由；两条都必须实际出现在英文回答中并得到简短展开。可以调整核心短语周围的主语和时态，但每条至少保留一段与清单和回答逐字一致的英文措辞。四道题可重复使用适用的核心短语和固定句式，以减少背诵量。举例优先沿用用户原回答中清楚且贴题的例子；需要丰富内容时，再选最多一个已提供的素材作简短补充。例子服务于理由，不代替两个核心短语。不得编造用户原回答及背诵素材之外的个人经历。`,
     `回答开头直接回应题目，然后清楚说明第一个核心理由、第二个核心理由，并在合适时用素材中的具体细节举例。英语自然、易背，适合约 45 秒口述（通常 70–95 个英文词）。题目若问比较、同意与否、原因、未来趋势或影响因素，须完整回应所有部分。不要为了套用短语或例子而绕开问题。`,
     `只返回 JSON：{"answer":"优化后的英文推荐回答","optimizationNote":"一句中文说明保留了原回答的哪些观点或例子、改善了什么；原回答不可用时如实说明","reasonIds":[2,11],"reasonUses":[{"id":2,"phrase":"从第 2 条原句中逐字摘取、且在答案中逐字出现的英文片段"},{"id":11,"phrase":"从第 11 条原句中逐字摘取、且在答案中逐字出现的英文片段"}],"reasonNote":"一句中文说明两个核心短语怎样分别支撑答案","materialIds":["素材中实际存在的编号"],"reusedPhrases":["逐字出现在素材和答案中的其他英文短语"],"reuseNote":"一句中文说明所用举例素材；没有例子则留空"}。reasonIds 必须恰好两个不同的 1–12 编号；reasonUses 必须分别对应这两个编号，每个 phrase 至少三个英文词，且确实同时出现在该编号的原句和英文答案中；materialIds 最多一个，没用故事则为空数组；不得虚构复用。`,
+    feedbackLanguageInstruction(language),
   ].join("\n\n");
   const { models } = await getCredential(ownerId);
   async function generate(model: string, endpoint: "chat/completions" | "responses") {

@@ -124,3 +124,48 @@ test("recommendations use the active material library and retain the user's orig
   const mine = structuredClone(shared); mine.reasons[0] = { theme: "Focus", sentence: "Working together gives me steady motivation" };
   await routes.PUT(s.request("/api/materials", "PUT", mine)); await generate(mine);
 });
+
+test("language preference survives cookie round trips and localizes dynamic messages", () => {
+  const s = setup(); const locale = s.load("lib/language.ts");
+  assert.equal(locale.languageFromCookie(locale.languageCookie("en", true)), "en");
+  assert.equal(locale.languageFromCookie(locale.languageCookie("zh")), "zh");
+  assert.equal(locale.languageFromCookie("studio_language=invalid"), "zh");
+  assert.equal(locale.requestLanguage({ headers: new Headers({ cookie: "studio_language=en" }) }), "en");
+  assert.equal(locale.requestLanguage({ headers: new Headers({ cookie: "studio_language=en", "x-studio-language": "zh" }) }), "zh");
+  assert.equal(locale.translateText("正在评分第 {0}/11 题…", "en", 8), "Scoring question 8/11…");
+  assert.equal(locale.translateText("Scoring question 8/11…", "zh"), "正在评分第 8/11 题…");
+  assert.equal(locale.translateText("ztoken chat/completions 接口返回 502。请检查 API 设置后重试。", "en"), "ztoken chat/completions returned 502. Check your API settings and try again.");
+  assert.equal(locale.translateText("My original answer and my file.wav", "zh"), "My original answer and my file.wav");
+});
+
+test("English requests receive English API errors and default practice names", async () => {
+  const s = setup(); const routes = s.load("app/api/attempts/[[...parts]]/route.ts");
+  const englishRequest = (url, body) => new Request(origin + url, { method: "POST", headers: { Origin: origin, Cookie: "studio_language=en", "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const created = await routes.POST(englishRequest("/api/attempts", {}));
+  assert.match((await created.json()).attempt.title, /^Speaking practice · /);
+  const invalid = await routes.POST(englishRequest("/api/attempts", { title: 5 }));
+  assert.equal((await invalid.json()).error, "The practice name format is invalid.");
+  s.user(null);
+  const denied = await routes.GET(new Request(origin + "/api/attempts", { headers: { Cookie: "studio_language=en" } }));
+  assert.equal((await denied.json()).error, "Sign in to continue.");
+});
+
+test("output language reaches audio scoring, recommendations, and overall estimation", async () => {
+  const s = setup(); const provider = s.load("lib/provider.ts"); await provider.saveCredential("owner-a", "test-language-api-key-12345", provider.DEFAULT_MODELS);
+  s.load("lib/references.ts").getReferenceAudio = async () => [3, 4, 5].map((score) => ({ score, bytes: new Uint8Array([1, 2, 3]) }));
+  const calls = [];
+  s.fetch(async (_url, options) => { const body = JSON.parse(options.body); calls.push(body); return Response.json({ choices: [{ message: { content: JSON.stringify({ score: 3, transcript: "My original response", audibleEvidence: "Clear words", reason: "Relevant response", advice: "Develop the example" }) } }] }); });
+  const evaluate = s.load("lib/evaluate.ts");
+  const scored = await evaluate.scoreItem("owner-a", 8, "Why do you study?", { type: "audio/wav" }, new Uint8Array([1, 2, 3]), "en");
+  assert.equal(scored.score, 3);
+  assert.match(calls[0].messages[0].content[0].text, /OUTPUT LANGUAGE:.*English/);
+  assert.equal(calls[0].messages.filter((m) => m.content.some((c) => c.type === "input_audio")).length, 4);
+  const attempt = { prompts: Array(11).fill("Why do you study?"), results: Array(11).fill(scored) };
+  const shared = s.load("lib/shared-material.ts").sharedMaterial;
+  s.fetch(async (_url, options) => { const body = JSON.parse(options.body); calls.push(body); return Response.json({ choices: [{ message: { content: JSON.stringify({ answer: `My original response. ${shared.reasons[0].sentence}. ${shared.reasons[1].sentence}.`, reasonIds: [1, 2] }) } }] }); });
+  await s.load("lib/recommend.ts").recommendAnswer("owner-a", attempt, 8, "en");
+  assert.match(calls[1].messages[0].content, /OUTPUT LANGUAGE:.*English/);
+  s.fetch(async (_url, options) => { const body = JSON.parse(options.body); calls.push(body); return Response.json({ output_text: JSON.stringify({ band: 3.5, note: "An estimate based on all responses." }) }); });
+  await evaluate.estimateBand("owner-a", attempt, "en");
+  assert.match(calls[2].input, /OUTPUT LANGUAGE:.*English/);
+});

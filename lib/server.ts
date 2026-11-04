@@ -1,4 +1,5 @@
 import { env } from "cloudflare:workers";
+import { requestLanguage, translateText } from "./language";
 import { getChatGPTUser } from "../app/chatgpt-auth";
 import { Attempt, emptyFiles, emptyPrompts, emptyResults, StoredFile } from "./attempt";
 
@@ -58,10 +59,11 @@ export async function saveAttempt(attempt: Attempt, ownerId: string) {
 }
 
 export class HttpError extends Error { constructor(public status: number, message: string) { super(message); } }
-export function errorResponse(error: unknown) {
-  if (error instanceof HttpError) return Response.json({ error: error.message }, { status: error.status });
+export function errorResponse(error: unknown, request?: Request) {
+  const language = requestLanguage(request);
+  if (error instanceof HttpError) return Response.json({ error: translateText(error.message, language) }, { status: error.status });
   console.error("TOEFL site request failed", error);
-  return Response.json({ error: "处理失败，请稍后重试。已完成的内容仍会保留。" }, { status: 500 });
+  return Response.json({ error: translateText("处理失败，请稍后重试。已完成的内容仍会保留。", language) }, { status: 500 });
 }
 
 export function responseText(data: Record<string, unknown>): string {

@@ -1,3 +1,7 @@
+"use client";
+
+import { clientTranslate as t } from "../lib/language";
+import { useLanguage } from "./language";
 import { AudioLines, BookOpenText, CheckCircle2, ChevronRight, FileImage, Settings2, Sparkles } from "lucide-react";
 
 type TutorialProps = { configured: boolean; onPractice: () => void; onSettings: () => void; onHistory: () => void };
@@ -20,23 +24,24 @@ const faqs = [
 ];
 
 export default function Tutorial({ configured, onPractice, onSettings, onHistory }: TutorialProps) {
+  const { t } = useLanguage();
   return <div className="tutorial">
     <section className="tutorial-welcome" aria-labelledby="tutorial-start-title">
       <span className="tutorial-badge"><BookOpenText size={15}/> FIRST PRACTICE</span>
-      <h2 id="tutorial-start-title">从第一次上传，到看懂你的报告</h2>
-      <p>准备好题目截图和 11 段回答录音，按下面四步完成一次练习。</p>
-      <div className="tutorial-start-actions"><button className="primary-button" onClick={onPractice}>前往练习 <ChevronRight size={16}/></button><button className="tutorial-link" onClick={onSettings}>{configured ? "查看 API 设置" : "先设置 API"} <ChevronRight size={15}/></button></div>
+      <h2 id="tutorial-start-title">{t("从第一次上传，到看懂你的报告")}</h2>
+      <p>{t("准备好题目截图和 11 段回答录音，按下面四步完成一次练习。")}</p>
+      <div className="tutorial-start-actions"><button className="primary-button" onClick={onPractice}>{t("前往练习")}<ChevronRight size={16}/></button><button className="tutorial-link" onClick={onSettings}>{configured ? t("查看 API 设置") : t("先设置 API")} <ChevronRight size={15}/></button></div>
     </section>
 
     <section className="tutorial-checklist" aria-labelledby="tutorial-materials-title">
-      <h2 id="tutorial-materials-title">开始前，准备这三项</h2>
-      <ul><li><CheckCircle2 size={17}/><span>一组完整题目：7 道 Listen and Repeat + 4 道 Take an Interview。</span></li><li><CheckCircle2 size={17}/><span>每题一段你自己的回答录音，建议在文件名中标明题型和题号。</span></li><li><CheckCircle2 size={17}/><span>可用的 ztoken API 密钥，以及支持相应输入的模型与调用额度。</span></li></ul>
+      <h2 id="tutorial-materials-title">{t("开始前，准备这三项")}</h2>
+      <ul><li><CheckCircle2 size={17}/><span>{t("一组完整题目：7 道 Listen and Repeat + 4 道 Take an Interview。")}</span></li><li><CheckCircle2 size={17}/><span>{t("每题一段你自己的回答录音，建议在文件名中标明题型和题号。")}</span></li><li><CheckCircle2 size={17}/><span>{t("可用的 ztoken API 密钥，以及支持相应输入的模型与调用额度。")}</span></li></ul>
     </section>
 
-    <section aria-labelledby="tutorial-steps-title"><div className="tutorial-section-heading"><h2 id="tutorial-steps-title">完成第一次评分</h2><span>按顺序操作即可</span></div><ol className="tutorial-steps">{steps.map(({ title, icon: Icon, text, tip }, index) => <li className="tutorial-step" key={title}><div className="tutorial-step-top"><span className="tutorial-step-number">0{index + 1}</span><Icon size={20}/></div><h3>{title}</h3><p>{text}</p><p className="tutorial-tip">{tip}</p></li>)}</ol></section>
+    <section aria-labelledby="tutorial-steps-title"><div className="tutorial-section-heading"><h2 id="tutorial-steps-title">{t("完成第一次评分")}</h2><span>{t("按顺序操作即可")}</span></div><ol className="tutorial-steps">{steps.map(({ title, icon: Icon, text, tip }, index) => <li className="tutorial-step" key={t(title)}><div className="tutorial-step-top"><span className="tutorial-step-number">0{index + 1}</span><Icon size={20}/></div><h3>{t(title)}</h3><p>{t(text)}</p><p className="tutorial-tip">{t(tip)}</p></li>)}</ol></section>
 
-    <section className="tutorial-reading" aria-labelledby="tutorial-reading-title"><span className="icon-tile mint"><Sparkles size={21}/></span><div><h2 id="tutorial-reading-title">每次练习后，先改进一个问题</h2><p>先回听录音，再对照评分依据和建议。Interview 题可比较原回答与优化后的推荐回答，练习所选的两个核心短语，然后重新录音检验改进。</p><button className="tutorial-link" onClick={onHistory}>查看历史练习 <ChevronRight size={15}/></button></div></section>
+    <section className="tutorial-reading" aria-labelledby="tutorial-reading-title"><span className="icon-tile mint"><Sparkles size={21}/></span><div><h2 id="tutorial-reading-title">{t("每次练习后，先改进一个问题")}</h2><p>{t("先回听录音，再对照评分依据和建议。Interview 题可比较原回答与优化后的推荐回答，练习所选的两个核心短语，然后重新录音检验改进。")}</p><button className="tutorial-link" onClick={onHistory}>{t("查看历史练习")}<ChevronRight size={15}/></button></div></section>
 
-    <section aria-labelledby="tutorial-faq-title"><div className="tutorial-section-heading"><h2 id="tutorial-faq-title">常见问题</h2><span>点击展开说明</span></div><div className="tutorial-faq">{faqs.map(({ question, answer }) => <details key={question}><summary>{question}<ChevronRight size={16}/></summary><p>{answer}</p></details>)}</div></section>
+    <section aria-labelledby="tutorial-faq-title"><div className="tutorial-section-heading"><h2 id="tutorial-faq-title">{t("常见问题")}</h2><span>{t("点击展开说明")}</span></div><div className="tutorial-faq">{faqs.map(({ question, answer }) => <details key={t(question)}><summary>{t(question)}<ChevronRight size={16}/></summary><p>{t(answer)}</p></details>)}</div></section>
   </div>;
 }

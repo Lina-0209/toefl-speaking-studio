@@ -4,9 +4,9 @@ import { validateMaterial } from "../../../lib/material";
 import { getCredential, providerJson } from "../../../lib/provider";
 import { assertSameOrigin, errorResponse, getBindings, HttpError, parseModelJson, requireOwner, responseText } from "../../../lib/server";
 
-export async function GET() {
+export async function GET(request?: Request) {
   try { const owner = await requireOwner(); const saved = await getMaterial(owner); return Response.json({ material: saved ?? sharedMaterial, source: saved ? "personal" : "shared" }); }
-  catch (error) { return errorResponse(error); }
+  catch (error) { return errorResponse(error, request); }
 }
 
 export async function PUT(request: Request) {
@@ -19,7 +19,7 @@ export async function PUT(request: Request) {
     catch (error) { throw new HttpError(400, (error as Error).message); }
     await getBindings().db.prepare("INSERT INTO study_materials (owner_id, content, updated_at) VALUES (?, ?, ?) ON CONFLICT(owner_id) DO UPDATE SET content=excluded.content, updated_at=excluded.updated_at").bind(owner, JSON.stringify(material), new Date().toISOString()).run();
     return Response.json({ material });
-  } catch (error) { return errorResponse(error); }
+  } catch (error) { return errorResponse(error, request); }
 }
 
 export async function POST(request: Request) {
@@ -39,11 +39,11 @@ export async function POST(request: Request) {
     let material;
     try { material = validateMaterial(parsed); } catch (error) { throw new HttpError(502, `识别结果不完整：${(error as Error).message}`); }
     return Response.json({ material });
-  } catch (error) { return errorResponse(error); }
+  } catch (error) { return errorResponse(error, request); }
 }
 
 export async function DELETE(request: Request) {
   try {
     assertSameOrigin(request); const owner = await requireOwner(); await getBindings().db.prepare("DELETE FROM study_materials WHERE owner_id = ?").bind(owner).run(); return Response.json({ ok: true }); }
-  catch (error) { return errorResponse(error); }
+  catch (error) { return errorResponse(error, request); }
 }

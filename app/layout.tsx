@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { headers } from "next/headers";
+import { requestLanguage } from "../lib/language";
+import { LanguageProvider } from "./language";
 
 export const metadata: Metadata = {
   title: "声分 · TOEFL Speaking Studio 开源版",
@@ -10,14 +13,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const language = requestLanguage({ headers: await headers() });
   return (
-    <html lang="zh-CN">
-      <body className="antialiased">{children}</body>
+    <html lang={language === "en" ? "en" : "zh-CN"}>
+      <body className="antialiased"><LanguageProvider initialLanguage={language}>{children}</LanguageProvider></body>
     </html>
   );
 }
